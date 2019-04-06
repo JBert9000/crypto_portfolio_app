@@ -35,39 +35,15 @@ root = Tk()
 
 # ********** Create Header **********
 
-name = Label(root, text="Name", bg="white", font="Verdana 8 bold")
-name.grid(row=0, column=0, sticky=N + S + E + W)
+headers = ["Name", "Rank", "Current Price", "Price Paid", "Current Price", "P/L Per Coin", "1 Hour Change", "24 Hour Change", "7 day Change", "Current Value", "P/L Total"]
+for i, header in enumerate(headers):
+    Label(root, text=header, bg="white" if i % 2 == 0 else "silver", font="Verdana 8 bold").grid(row=0, column=i, sticky=N + S + E + W)
 
-rank = Label(root, text="Rank", bg="silver", font="Verdana 8 bold")
-rank.grid(row=0, column=1, sticky=N + S + E + W)
 
-current_price = Label(root, text="Current Price", bg="white", font="Verdana 8 bold")
-current_price.grid(row=0, column=2, sticky=N + S + E + W)
-
-price_paid = Label(root, text="Price Paid", bg="silver", font="Verdana 8 bold")
-price_paid.grid(row=0, column=3, sticky=N + S + E + W)
-
-PL_per_coin = Label(root, text="P/L Per Coin", bg="white", font="Verdana 8 bold")
-PL_per_coin.grid(row=0, column=4, sticky=N + S + E + W)
-
-hour_change = Label(root, text="1 Hour Change", bg="silver", font="Verdana 8 bold")
-hour_change.grid(row=0, column=5, sticky=N + S + E + W)
-
-tf_hour_change = Label(root, text="24 Hour Change", bg="white", font="Verdana 8 bold")
-tf_hour_change.grid(row=0, column=6, sticky=N + S + E + W)
-
-seven_day_change = Label(root, text="7 Day Change", bg="silver", font="Verdana 8 bold")
-seven_day_change.grid(row=0, column=7, sticky=N + S + E + W)
-
-current_value = Label(root, text="Current Value", bg="white", font="Verdana 8 bold")
-current_value.grid(row=0, column=8, sticky=N + S + E + W)
-
-PL_total = Label(root, text="P/L Total", bg="silver", font="Verdana 8 bold")
-PL_total.grid(row=0, column=9, sticky=N + S + E + W)
 
 # ********** End of Header **********
 
-coin_names = ["", "xtrabytes", "vestchain", "dash"]
+
 
 # api_request = requests.get("https://api.coinmarketcap.com/v1/ticker/" + str(coin_names))
 # api = json.loads(api_request.content)
@@ -82,10 +58,11 @@ print("----------------------------------")
 #     for coin_names in api_request:
 #         print(i)
 
+coin_names = ["bitcoin", "xtrabytes", "vestchain", "dash"]
 
 
-def lookup():
-    api_request = requests.get("https://api.coinmarketcap.com/v1/ticker/")
+def lookup(coin_name="", row_count=1, portfolio_profit_loss=0, total_current_value=0):
+    api_request = requests.get("https://api.coinmarketcap.com/v1/ticker/" + coin_name)
     api = json.loads(api_request.content)
 
     # My portfolio
@@ -127,9 +104,7 @@ def lookup():
         }
         ]
 
-    portfolio_profit_loss = 0
-    total_current_value = 0
-    row_count = 1
+    # row_count = 1
     # column_count = 0
     pie = []
     pie_size = []
@@ -193,6 +168,9 @@ def lookup():
 
                 row_count += 1
 
+    return row_count, portfolio_profit_loss, total_current_value
+
+def finish(row_count, portfolio_profit_loss, total_current_value):
 
     portfolio_profits = Label(root, text="Profit/Loss: ${0:.2f}".format(float(portfolio_profit_loss)), font="Verdana 8 "
                                                                                                         "bold",
@@ -224,10 +202,18 @@ def lookup():
         plt.tight_layout()
         plt.show()
 
-    graph_button = Button(root, text="Pie Chart", command=graph(pie, pie_size))
+    graph_button = Button(root, text="Pie Chart", command= lambda: graph(pie, pie_size))
     graph_button.grid(row=row_count, column=5)
 
-lookup()
+    return row_count
+
+row_count, portfolio_profit_loss, total_current_value = 1, 0 ,0
+for coin_name in coin_names:
+    row_count, portfolio_profit_loss, total_current_value = lookup(coin_name=coin_name, row_count=row_count, portfolio_profit_loss=portfolio_profit_loss, total_current_value=total_current_value)
+
+finish(row_count, portfolio_profit_loss, total_current_value)
+
+
 
 root.mainloop()
 
