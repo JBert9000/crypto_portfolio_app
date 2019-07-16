@@ -13,26 +13,6 @@ def red_green(amount):
 
 root = Tk()
 
-
-# root.title("Crypto Currency Portfolio")
-# root.iconbitmap(r'c:\codemy.ico')
-
-            # header_names = ["Name", "Rank", "Current Price", "Price Paid", "P/L Per Coin", "1 Hour Change", "24 Hour Change",
-            #                 "7 Day Change", "Current Value", "P/L Total"]
-            #
-            # colour_change = ["white", "silver"]
-            #
-            # column = range(10)
-            #
-            # header = Label(root, text=header_names, bg=colour_change, font = "Verdana 8 bold")
-            # header.grid(row=0, column=column, sticky=N+S+E+W)
-            #
-            # for i in range(len(header_names)):
-            #     print(header[i])
-
-
-
-
 # ********** Create Header **********
 
 headers = ["Name", "Rank", "Current Price", "Price Paid", "Current Price", "P/L Per Coin", "1 Hour Change", "24 Hour Change", "7 day Change", "Current Value", "P/L Total"]
@@ -40,23 +20,7 @@ for i, header in enumerate(headers):
     Label(root, text=header, bg="white" if i % 2 == 0 else "silver", font="Verdana 8 bold").grid(row=0, column=i, sticky=N + S + E + W)
 
 
-
 # ********** End of Header **********
-
-
-
-# api_request = requests.get("https://api.coinmarketcap.com/v1/ticker/" + str(coin_names))
-# api = json.loads(api_request.content)
-
-# xby_request = requests.get("https://api.coinmarketcap.com/v1/ticker/xtrabytes")
-# xby = json.loads(xby_request.content)
-
-
-print("----------------------------------")
-
-# for i in coin_names:
-#     for coin_names in api_request:
-#         print(i)
 
 coin_names = ["bitcoin", "xtrabytes", "vestchain", "dash"]
 
@@ -104,15 +68,12 @@ def lookup(coin_name="", row_count=1, portfolio_profit_loss=0, total_current_val
         }
         ]
 
-    # row_count = 1
-    # column_count = 0
     pie = []
     pie_size = []
     for x in api:
         for coin in my_portfolio:
             if coin["sym"] == x["symbol"]:
 
-                # Do some math
                 total_paid = float(coin["amount_owned"]) * float(coin["price_paid_per"])
                 current_value = float(coin["amount_owned"]) * float(x["price_usd"])
                 profit_loss = float(current_value) - float(total_paid)
@@ -123,14 +84,7 @@ def lookup(coin_name="", row_count=1, portfolio_profit_loss=0, total_current_val
                 pie.append(x["name"])
                 pie_size.append(coin["amount_owned"])
 
-                # print(x["name"])
-                # print(" Current Price: ${0:.2f}".format(float(x["price_usd"])))
-                # print(" Profit / Loss Per Coin: ${0:.2f}".format(float(profit_loss_per_coin)))
-                # print(" Rank: {0:.0f}".format(float(x["rank"])))
-                # print(" Total Paid: ${0:.2f}".format(float(total_paid)))
-                # print(" Current Value: ${0:.2f}".format(current_value))
-                # print(" Profit / Loss: ${0:.2f}".format(profit_loss))
-                # print("----------------------------------")
+# *******************
 
                 name = Label(root, text=x["name"], bg="white")
                 name.grid(row=row_count, column=0, sticky=N + S + E + W)
@@ -178,14 +132,7 @@ def finish(row_count, portfolio_profit_loss, total_current_value):
     portfolio_profits.grid(row=row_count, column=0, sticky=W, padx=10, pady=10)
 
     root.title("Cryotp Currency Porfolio - Portolio Value: ${0:.2f}".format(float(total_current_value)))
-    # total_current_value_output = Label(root, text="Total Value: ${0:.2f}".format(float(total_current_value)),
-    #                                    font="Verdana 8 "
-    #                                                                                                     "bold",
-    #                           fg=red_green(float(total_current_value)))
-    #
-    # total_current_value_output.grid(row=row_count+1, column=0, sticky=W, padx=10, pady=10)
 
-    # print("GAINZ = ${0:.2f}".format(float(portfolio_profit_loss)))
 
     api = ""
     update_button = Button(root, text="Update Prices", command=lookup)
@@ -213,15 +160,4 @@ for coin_name in coin_names:
 
 finish(row_count, portfolio_profit_loss, total_current_value)
 
-
-
 root.mainloop()
-
-
-# currency = input("Insert Crypto Coin Symbol: ")
-#
-# for y in api:
-#     for symbol in currency:
-#         if symbol == y["symbol"]:
-#             print(y["symbol"])
-
