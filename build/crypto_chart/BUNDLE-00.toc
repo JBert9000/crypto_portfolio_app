@@ -1,0 +1,3 @@
+([('crypto_chart',
+   '/Users/Honzor/Desktop/PROGRAMMING/Python/projects/crypto_portfolio_app/dist/crypto_chart',
+   'EXECUTABLE')],)
